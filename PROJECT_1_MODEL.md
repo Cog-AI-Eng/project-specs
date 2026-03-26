@@ -1,9 +1,9 @@
 # Project 1: E-Commerce Predictive Model
 
 **Skills:** Applying AI and Machine Learning Concepts + Training and Deploying Models with AWS SageMaker
-**Duration:** ~2 weeks
-**Team Size:** Individual
-**Delivery:** Presentation + deployed SageMaker endpoint(s)
+* **Duration:** ~2 weeks
+* **Team Size:** Individual
+* **Delivery:** Presentation + deployed SageMaker endpoint(s)
 
 ---
 
@@ -42,41 +42,28 @@ For each target you train, **drop the other two target columns** plus `order_id`
 
 ### Phase A -- Model Development (AIML Skills)
 
-| # | Requirement | Grading Weight |
-|---|---|---|
-| A1 | **EDA Notebook** -- Load the dataset. Profile feature distributions. For your chosen target(s), identify class balance (classification) or distribution shape (regression). Visualize at least 3 feature-target relationships. Identify which features appear most correlated with your target(s). | 5% |
-| A2 | **Data Preparation** -- Encode categorical columns (`primary_category`, `payment_method`, `currency`, `primary_device`) to numeric. Drop identifiers and non-target outcome columns. Perform a train/validation/test split (70/15/15) with `random_state=42`. For classification targets, use stratified splitting. | 5% |
-| A3 | **Baseline Model** -- Train a simple baseline locally (e.g., `DummyClassifier` / `LogisticRegression` for classification, mean predictor / `LinearRegression` for regression). Report metrics on the validation set. This establishes the floor that XGBoost must beat. | 10% |
-| A4 | **XGBoost Training on SageMaker** -- Format the training data for SageMaker's built-in XGBoost (target column first, no headers, numeric only). Upload to S3. Configure and launch a training job using `sagemaker.estimator.Estimator` with the XGBoost `image_uri`. Set at least these hyperparameters: `objective`, `num_round`, `max_depth`, `eta`. | 15% |
-| A5 | **Evaluation** -- Pull model artifacts, load locally or use Batch Transform on the test set. Report: | 10% |
+| # | Requirement |
+|---|---|
+| A1 | **EDA Notebook** -- Load the dataset. Profile feature distributions. For your chosen target(s), identify class balance (classification) or distribution shape (regression). Visualize at least 3 feature-target relationships. Identify which features appear most correlated with your target(s). |
+| A2 | **Data Preparation** -- Encode categorical columns (`primary_category`, `payment_method`, `currency`, `primary_device`) to numeric. Drop identifiers and non-target outcome columns. Perform a train/validation/test split (70/15/15) with `random_state=42`. For classification targets, use stratified splitting. |
+| A3 | **Baseline Model** -- Train a simple baseline locally (e.g., `DummyClassifier` / `LogisticRegression` for classification, mean predictor / `LinearRegression` for regression). Report metrics on the validation set. This establishes the floor that XGBoost must beat. |
+| A4 | **XGBoost Training on SageMaker** -- Format the training data for SageMaker's built-in XGBoost (target column first, no headers, numeric only). Upload to S3. Configure and launch a training job using `sagemaker.estimator.Estimator` with the XGBoost `image_uri`. Set at least these hyperparameters: `objective`, `num_round`, `max_depth`, `eta`. |
+| A5 | **Evaluation** -- Pull model artifacts, load locally or use Batch Transform on the test set. Report: |
 | | - **Classification:** Precision, Recall, F1, AUC-ROC, Confusion Matrix | |
 | | - **Regression:** RMSE, MAE, R² | |
 | | Compare against your baseline. Explain why your primary metric matters for this business problem. | |
-| A6 | **Explainability** -- Generate SHAP summary plots for the XGBoost model. Identify the top 5 features driving predictions. Interpret each in business terms (e.g., "high `user_cart_removals_7d` signals purchase hesitation, which correlates with higher return risk"). | 10% |
+| A6 | **Explainability** -- Generate SHAP summary plots for the XGBoost model. Identify the top 5 features driving predictions. Interpret each in business terms (e.g., "high `user_cart_removals_7d` signals purchase hesitation, which correlates with higher return risk"). |
 
 ### Phase B -- SageMaker Deployment
 
 | # | Requirement | Grading Weight |
 |---|---|---|
-| B1 | **S3 & IAM Setup** -- Create an S3 bucket with organized prefixes (`data/train/`, `data/test/`, `output/`). Configure a least-privilege IAM execution role scoped to your bucket. | 5% |
-| B2 | **Model Registry** -- Register the trained model in a Model Package Group. Set status to `PendingManualApproval`, then approve. | 5% |
-| B3 | **Deploy to Endpoint** -- Deploy to a real-time endpoint (`ml.m5.xlarge`). Invoke with `boto3` using a sample CSV payload. Verify the prediction is reasonable. | 15% |
-| B4 | **Cleanup** -- Delete the endpoint, endpoint configuration, and model after presentation. Demonstrate or screenshot the cleanup. | 5% |
+| B1 | **S3 & IAM Setup** -- Create an S3 bucket with organized prefixes (`data/train/`, `data/test/`, `output/`). Configure a least-privilege IAM execution role scoped to your bucket. |
+| B2 | **Model Registry** -- Register the trained model in a Model Package Group. Set status to `PendingManualApproval`, then approve. |
+| B3 | **Deploy to Endpoint** -- Deploy to a real-time endpoint (`ml.m5.xlarge`). Invoke with `boto3` using a sample CSV payload. Verify the prediction is reasonable. |
+| B4 | **Cleanup** -- Delete the endpoint, endpoint configuration, and model after presentation. Demonstrate or screenshot the cleanup. |
 
 **Cost management:** Each `ml.m5.xlarge` endpoint costs ~$0.23/hr. Deploy one endpoint at a time. Test it, verify predictions, then delete before deploying the next. Don't leave endpoints running overnight. If you train all three targets, you can register all three in Model Registry but only deploy one at a time.
-
----
-
-## Grading Summary
-
-| Category | Weight |
-|---|---|
-| EDA & Data Preparation (A1-A2) | 10% |
-| Baseline & XGBoost Training (A3-A4) | 25% |
-| Evaluation & Explainability (A5-A6) | 20% |
-| SageMaker Deployment (B1-B3) | 25% |
-| Cleanup & Presentation (B4 + presentation) | 10% |
-| **Bonus: Additional targets** (each extra trained + evaluated model) | +5% each |
 
 ---
 
